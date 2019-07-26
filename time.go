@@ -34,7 +34,7 @@ func GetNowDate() string {
 	return time.Unix(GetNowTimeStamp(), 0).Format("2006-01-02 15:04:05")
 }
 
-// 获取当前时间
+// 获取当前时间(根据给定的时间格式)
 func GetNowDateByFormat(format string) string {
 	return time.Unix(GetNowTimeStamp(), 0).Format(format)
 }
@@ -62,7 +62,7 @@ func GetNowDateUTC() string {
 	return time.Unix(GetNowTimeStamp(), 0).UTC().Format("2006-01-02 15:04:05")
 }
 
-// 获取当前时间
+// 获取当前时间(根据给定的格式)
 func GetNowDateByFormatUTC(format string) string {
 	return time.Unix(GetNowTimeStamp(), 0).UTC().Format(format)
 }
