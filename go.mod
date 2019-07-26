@@ -1,4 +1,4 @@
-module git@github.com:guaidashu/go_helper.git
+module github.com/guaidashu/go_helper
 
 go 1.12
 
