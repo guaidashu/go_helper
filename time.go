@@ -77,10 +77,10 @@ func GetStampByDateAndFormat(date string, format string) int64 {
 }
 
 // 根据时间戳和给定格式以及 要加(减)的 年 月 日 获取对应时间字符串
-func GetDateByStampAndReduceDate(stamp int64, format string, date ...int) {
-	time.Unix(stamp, 0).AddDate(date[0], date[1], date[2]).Format(format)
+func GetDateByStampAndReduceDate(stamp int64, format string, date ...int) string {
+	return time.Unix(stamp, 0).AddDate(date[0], date[1], date[2]).Format(format)
 }
 
-func GetDateByStampAndReduceDateUTC(stamp int64, format string, date ...int) {
-	time.Unix(stamp, 0).AddDate(date[0], date[1], date[2]).UTC().Format(format)
+func GetDateByStampAndReduceDateUTC(stamp int64, format string, date ...int) string {
+	return time.Unix(stamp, 0).AddDate(date[0], date[1], date[2]).UTC().Format(format)
 }
