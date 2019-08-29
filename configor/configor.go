@@ -2,7 +2,7 @@
   create by yy on 2019-08-29
 */
 
-package go_helper
+package configor
 
 import (
 	"fmt"
