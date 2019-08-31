@@ -54,7 +54,11 @@ func CreateMsPath(args ...interface{}) error {
 			continue
 		}
 		if pathLength == k {
-			_, err = createMsPath(tmpPath)
+			if isCreateDirectory {
+				err = createMsDir(tmpPath)
+			} else {
+				_, err = createMsPath(tmpPath)
+			}
 		} else {
 			err = createMsDir(tmpPath)
 		}
