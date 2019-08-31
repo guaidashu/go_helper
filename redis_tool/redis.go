@@ -85,7 +85,7 @@ return an interface and an error
 Origin command: GET KEY_NAME
 */
 func (r *RedisConn) Get(key string) (interface{}, error) {
-	return redis.String(r.conn.Do("GET", key))
+	return String(r.conn.Do("GET", key))
 }
 
 /**
