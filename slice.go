@@ -14,9 +14,10 @@ func InSlice(v string, sl []string) bool {
 	return false
 }
 
-func Prepend(sc *[]interface{}, value interface{}) *[]interface{} {
+// 在头部添加元素
+func Prepend(sc *[]interface{}, value ...interface{}) *[]interface{} {
 	result := make([]interface{}, 1)
-	result[0] = value
+	result[0] = value[0]
 	for _, v := range *sc {
 		result = append(result, v)
 	}

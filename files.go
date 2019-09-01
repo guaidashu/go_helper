@@ -22,6 +22,7 @@ import (
 // example:
 // CreateMsPath("test.txt", true, true)
 func CreateMsPath(args ...interface{}) error {
+	var err error
 	path := args[0].(string)
 	flag := true
 	isCreateDirectory := false
@@ -34,33 +35,29 @@ func CreateMsPath(args ...interface{}) error {
 	if !flag {
 		if isCreateDirectory {
 			err := createMsDir(path)
-			if err != nil {
-				return err
-			}
-		}
-		ok, err := createMsPath(path)
-		if !ok {
 			return err
 		}
+		err := createMsPath(path)
+		return err
+	}
+	if isCreateDirectory {
+		err = createMsAllDir(path)
+		return err
 	}
 	path = strings.Replace(path, "\\", "/", -1)
 	pathArr := strings.Split(path, "/")
 	tmpPath := ""
 	pathLength := len(pathArr) - 1
-	var err error
+	pathLengthSecond := pathLength - 1
 	for k, item := range pathArr {
 		tmpPath = getPath(tmpPath, item)
 		if ok, _ := PathExists(tmpPath); ok {
 			continue
 		}
 		if pathLength == k {
-			if isCreateDirectory {
-				err = createMsDir(tmpPath)
-			} else {
-				_, err = createMsPath(tmpPath)
-			}
-		} else {
-			err = createMsDir(tmpPath)
+			err = createMsPath(tmpPath)
+		} else if pathLengthSecond == k {
+			err = createMsAllDir(tmpPath)
 		}
 		if err != nil {
 			return err
@@ -79,18 +76,22 @@ func getPath(path string, item string) string {
 	return path + "/" + item
 }
 
-func createMsPath(path string) (bool, error) {
+func createMsPath(path string) error {
 	file, err := os.Create(path)
 	if err != nil {
 		fmt.Println("err = ", err)
-		return false, err
+		return err
 	}
 	defer file.Close()
-	return true, nil
+	return nil
 }
 
 func createMsDir(path string) error {
 	return os.Mkdir(path, os.ModePerm)
+}
+
+func createMsAllDir(path string) error {
+	return os.MkdirAll(path, os.ModePerm)
 }
 
 func PathExists(path string) (bool, error) {
@@ -98,8 +99,5 @@ func PathExists(path string) (bool, error) {
 	if err == nil {
 		return true, nil
 	}
-	//if os.IsNotExist(err) {
-	//	return false, nil
-	//}
 	return false, err
 }
