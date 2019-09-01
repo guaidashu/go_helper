@@ -1,4 +1,4 @@
-package crypto
+package crypto_tool
 
 import (
 	"crypto/md5"
@@ -7,7 +7,7 @@ import (
 
 func Md5(s string) string {
 	h := md5.New()
-	h.Write([]byte("123456"))
+	h.Write([]byte(s))
 	cipherStr := h.Sum(nil)
 	result := hex.EncodeToString(cipherStr)
 	return result
