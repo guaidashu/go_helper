@@ -3,7 +3,3 @@
 */
 
 package go_helper
-
-import (
-	_ "github.com/guaidashu/go_helper/test/sql/init"
-)
