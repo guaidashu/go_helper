@@ -5,7 +5,9 @@
 package go_helper
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 )
@@ -100,4 +102,40 @@ func PathExists(path string) (bool, error) {
 		return true, nil
 	}
 	return false, err
+}
+
+/**
+读取文件， buffer方式，可以读大文件
+param 1: file path
+param 2: buffer size
+*/
+func ReadFile(params ...interface{}) string {
+	var path string
+	if len(params) > 0 {
+		path = params[0].(string)
+	} else {
+		return ""
+	}
+	var size int
+	if len(params) > 1 {
+		size = params[0].(int)
+	} else {
+		size = 512
+	}
+	file, err := os.Open(path)
+	defer file.Close()
+	if err != nil {
+		return ""
+	}
+	s := ""
+	reader := bufio.NewReader(file)
+	buf := make([]byte, size)
+	for {
+		n, err := reader.Read(buf)
+		s = s + string(buf[:n])
+		if n < size || n <= 0 || err == io.EOF {
+			break
+		}
+	}
+	return s
 }
