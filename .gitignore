@@ -4,3 +4,4 @@ test
 go_helper
 main
 main.go
+.gitignore
