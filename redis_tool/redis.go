@@ -145,3 +145,8 @@ func (r *RedisConn) LRange(key string, args ...interface{}) (interface{}, error)
 	args = *(go_helper.Prepend(&args, key))
 	return r.conn.Do("lrange", args...)
 }
+
+func (r *RedisConn) String(value interface{}) string {
+	s, _ := redis.String(value, nil)
+	return s
+}
