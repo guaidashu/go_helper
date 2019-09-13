@@ -5,3 +5,4 @@ go_helper
 main
 main.go
 go.sum
+.DS_Store

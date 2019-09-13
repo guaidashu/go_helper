@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -137,5 +138,17 @@ func ReadFile(params ...interface{}) string {
 			break
 		}
 	}
+	return s
+}
+
+//过滤给定字符串(这个函数的目的开始是为了过滤我的json配置文件里的自定义注释)里的 注释，根据输入的 注释开头 和 结尾进行过滤
+// 过滤的 开头和结尾需要转移特殊字符， 具体方式看例子
+//example:
+//	FilterComment(data, "/\\*", "\\*/")
+func FilterComment(originStr, startStr, endStr string) string {
+	// 利用正则匹配替换
+	patter := "(" + startStr + `[\w\W]*?` + endStr + `)`
+	rg, _ := regexp.Compile(patter)
+	s := rg.ReplaceAllString(originStr, "")
 	return s
 }
