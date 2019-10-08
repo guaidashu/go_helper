@@ -25,7 +25,6 @@ param 1: int, 返回值的类型，
 		 1为 interface{}值类型，
 		 2为 空(nil)
 param 2: 如果param为 1，则此返回值是有效返回值
-param 3: 如果param为 2，则此返回值是有效返回值
 */
 func (j *JsonToMapValue) Get(key ...string) (int, interface{}) {
 	defer func() {
