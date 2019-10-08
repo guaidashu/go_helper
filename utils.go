@@ -44,7 +44,9 @@ func (j *JsonToMapValue) Get(key ...string) (int, interface{}) {
 			}
 		}
 	}()
+
 	length := len(key)
+
 	if length < 1 {
 		return 2, nil
 	}
