@@ -20,11 +20,18 @@ type JsonToMapValue struct {
 }
 
 /**
+zh:
 返回值说明
 param 1: int, 返回值的类型，
 		 1为 interface{}值类型，
 		 2为 空(nil)
 param 2: 如果param为 1，则此返回值是有效返回值
+en:
+The description of return values
+param 1: int, return type，
+		 1 is interface{}, type of value，
+		 2 is null(nil)
+param 2: if param is 1，the return value is a valid return value.
 */
 func (j *JsonToMapValue) Get(key ...string) (int, interface{}) {
 	defer func() {
