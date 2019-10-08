@@ -141,6 +141,42 @@ func ReadFile(params ...interface{}) string {
 	return s
 }
 
+/**
+读取文件， buffer方式，可以读大文件
+param 1: file path
+param 2: buffer size
+*/
+func ReadFileToByte(params ...interface{}) []byte {
+	var path string
+	if len(params) > 0 {
+		path = params[0].(string)
+	} else {
+		return nil
+	}
+	var size int
+	if len(params) > 1 {
+		size = params[0].(int)
+	} else {
+		size = 512
+	}
+	file, err := os.Open(path)
+	defer file.Close()
+	if err != nil {
+		return nil
+	}
+	var s []byte
+	reader := bufio.NewReader(file)
+	buf := make([]byte, size)
+	for {
+		n, err := reader.Read(buf)
+		s = append(s, buf[:n]...)
+		if n < size || n <= 0 || err == io.EOF {
+			break
+		}
+	}
+	return s
+}
+
 //过滤给定字符串(这个函数的目的开始是为了过滤我的json配置文件里的自定义注释)里的 注释，根据输入的 注释开头 和 结尾进行过滤
 // 过滤的 开头和结尾需要转移特殊字符， 具体方式看例子
 //example:
