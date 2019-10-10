@@ -62,14 +62,14 @@ func (j *JsonToMapValue) Get(key ...string) (int, interface{}) {
 		return 2, nil
 	}
 
-	var tmp map[string]interface{}
+	tmp := j.Value
 
 	// 现在处理 多层map的情况
 	for k, v := range key {
 		if k == length-1 {
 			return 1, tmp[v]
 		}
-		tmp = j.Value[key[k]].(map[string]interface{})
+		tmp = tmp[key[k]].(map[string]interface{})
 	}
 
 	// 不存在，返回空
