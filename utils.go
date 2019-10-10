@@ -6,6 +6,7 @@ package go_helper
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"runtime"
 )
@@ -85,4 +86,15 @@ func JsonToMap(value []byte) *JsonToMapValue {
 	return &JsonToMapValue{
 		Value: m,
 	}
+}
+
+/**
+用于报告错误行数和文件名在哪里，便于找bug
+This func is used to report the error line and file name
+so that we can find bug quickly.
+*/
+func NewReportError(err error) error {
+	_, fileName, line, _ := runtime.Caller(1)
+	data := fmt.Sprintf("%v, report in: %v: in line %v", err, fileName, line)
+	return errors.New(data)
 }
