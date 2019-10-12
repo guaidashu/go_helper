@@ -35,8 +35,13 @@ param 1: int, return type，
 param 2: if param is 1，the return value is a valid return value.
 */
 func (j *JsonToMapValue) Get(key ...string) (int, interface{}) {
+	var (
+		length int
+		err    interface{}
+		tmp    map[string]interface{}
+	)
 	defer func() {
-		if err := recover(); err != nil {
+		if err = recover(); err != nil {
 			switch err.(type) {
 			case runtime.Error: // 运行时错误
 				fmt.Println("runtime error:", err)
@@ -46,7 +51,7 @@ func (j *JsonToMapValue) Get(key ...string) (int, interface{}) {
 		}
 	}()
 
-	length := len(key)
+	length = len(key)
 
 	if length < 1 {
 		return 2, nil
@@ -62,7 +67,7 @@ func (j *JsonToMapValue) Get(key ...string) (int, interface{}) {
 		return 2, nil
 	}
 
-	tmp := j.Value
+	tmp = j.Value
 
 	// 现在处理 多层map的情况
 	for k, v := range key {
