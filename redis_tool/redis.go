@@ -116,11 +116,8 @@ func (r *RedisConn) SetNX(key string, args ...interface{}) (interface{}, error) 
 /**
 Close connection
 */
-func (r *RedisConn) Close() {
-	err := r.conn.Close()
-	if err != nil {
-		panic(fmt.Sprintf("close redis failed, error: %v", err))
-	}
+func (r *RedisConn) Close() error {
+	return r.conn.Close()
 }
 
 /**
