@@ -125,6 +125,10 @@ func (r *RedisConn) LPUSHX(key string, args ...interface{}) (interface{}, error)
 }
 
 // LRANGE
+//
+// LRange(key, start, end)
+// Start or end is beginning with 0.
+//
 // Get the elements in the specified range of the list.
 func (r *RedisConn) LRange(key string, args ...interface{}) (interface{}, error) {
 	args = *(go_helper.Prepend(&args, key))
@@ -145,7 +149,7 @@ func (r *RedisConn) LLen(key string) (interface{}, error) {
 
 // LINDEX
 // Get the element of the list header by index.
-func (r *RedisConn) LINDEX(key string) (interface{}, error) {
+func (r *RedisConn) LIndex(key string) (interface{}, error) {
 	return r.conn.Do("LINDEX", key)
 }
 
@@ -194,6 +198,14 @@ func (r *RedisConn) RPush(key string, args ...interface{}) (interface{}, error) 
 func (r *RedisConn) RPushx(key string, args ...interface{}) (interface{}, error) {
 	args = *(go_helper.Prepend(&args, key))
 	return r.conn.Do("RPUSHX", args...)
+}
+
+// LINSERT
+// LInsert(key, "BEFORE", element, value)
+// Insert value into before the element of the list.
+func (r *RedisConn) LInsert(key string, args ...interface{}) (interface{}, error) {
+	args = *(go_helper.Prepend(&args, key))
+	return r.conn.Do("LINSERT", args...)
 }
 
 // convert interface to string.
