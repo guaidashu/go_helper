@@ -23,9 +23,7 @@ type RedisConn struct {
 	Config *RedisConfig
 }
 
-/**
-init
-*/
+// init
 func (r *RedisConn) Init(config *RedisConfig) {
 	if config == nil {
 		r.Config = &RedisConfig{
@@ -52,9 +50,7 @@ func (r *RedisConn) Init(config *RedisConfig) {
 	r.Connection()
 }
 
-/**
-connect redis
-*/
+// connect redis
 func (r *RedisConn) Connection() {
 	conn, err := redis.Dial(r.Config.NetWork, r.Config.Address)
 	if err != nil {
@@ -69,80 +65,93 @@ func (r *RedisConn) Connection() {
 	r.conn = conn
 }
 
-/**
-Set a value for a customize key
-return an interface and an error
-Origin command: GET KEY_NAME
-*/
+// Set a value for a customize key
+// return an interface and an error
+// Origin command: GET KEY_NAME
 func (r *RedisConn) Set(key string, args ...interface{}) (interface{}, error) {
 	args = *(go_helper.Prepend(&args, key))
 	return r.conn.Do("SET", args...)
 }
 
-/**
-Get a value by a given key
-return an interface and an error
-Origin command: GET KEY_NAME
-*/
+// Get a value by a given key
+// return an interface and an error
+// Origin command: GET KEY_NAME
 func (r *RedisConn) Get(key string) (interface{}, error) {
 	return String(r.conn.Do("GET", key))
 }
 
-/**
-Check key whether exists
-Origin command: EXISTS KEY_NAME
-*/
+// Check key whether exists
+// Origin command: EXISTS KEY_NAME
 func (r *RedisConn) Exists(key string) (interface{}, error) {
 	return r.conn.Do("EXISTS", key)
 }
 
-/**
-Del key
-Origin command: DEL KEY_NAME
-*/
+// Del key
+// Origin command: DEL KEY_NAME
 func (r *RedisConn) Del(key string) (interface{}, error) {
 	return r.conn.Do("DEL", key)
 }
 
-/**
-Only set a value for the given key when the key is not exists
-Origin command: SETNX KEY_NAME VALUE
-*/
+// Only set a value for the given key when the key is not exists
+// Origin command: SETNX KEY_NAME VALUE
 func (r *RedisConn) SetNX(key string, args ...interface{}) (interface{}, error) {
 	args = *(go_helper.Prepend(&args, key))
 	return r.conn.Do("SETNX", args...)
 }
 
-/**
-Close connection
-*/
+// Close connection
 func (r *RedisConn) Close() error {
 	return r.conn.Close()
 }
 
-/**
-Set expire time
-*/
+// Expire
+// Set expire time
 func (r *RedisConn) Expire(key string, timeout int) (interface{}, error) {
 	return r.conn.Do("EXPIRE", key, timeout)
 }
 
-/**
-lpush
-*/
+// LPUSH
+// Insert one or more values into the list header
 func (r *RedisConn) LPush(key string, args ...interface{}) (interface{}, error) {
 	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("lpush", args...)
+	return r.conn.Do("LPUSH", args...)
 }
 
-/**
-lrange
-*/
+// LPUSHX
+// Insert one value into the the list header
+func (r *RedisConn) LPUSHX(key string, args ...interface{}) (interface{}, error) {
+	args = *(go_helper.Prepend(&args, key))
+	return r.conn.Do("LPUSHX", args...)
+}
+
+// LRANGE
+// Get the elements in the specified range of the list.
 func (r *RedisConn) LRange(key string, args ...interface{}) (interface{}, error) {
 	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("lrange", args...)
+	return r.conn.Do("LRANGE", args...)
 }
 
+// LPOP
+// Move out and get the first element of the list
+func (r *RedisConn) LPop(key string) (interface{}, error) {
+	return r.conn.Do("LPOP", key)
+}
+
+// LLEN
+// Get list length
+func (r *RedisConn) LLen(key string) (interface{}, error) {
+	return r.conn.Do("LLEN", key)
+}
+
+// LINDEX
+// Get the element of the list header by index.
+func (r *RedisConn) LINDEX(key string) (interface{}, error) {
+	return r.conn.Do("LINDEX", key)
+}
+
+
+
+// convert interface to string.
 func (r *RedisConn) String(value interface{}) string {
 	s, _ := redis.String(value, nil)
 	return s
