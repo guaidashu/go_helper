@@ -149,7 +149,52 @@ func (r *RedisConn) LINDEX(key string) (interface{}, error) {
 	return r.conn.Do("LINDEX", key)
 }
 
+// LRem
+// LRrm(key, count, value)
+//
+// count > 0: Search from the beginning of the header to the end of the table,
+// removing the equivalent of value, the number is count.
+//
+// count < 0: Search from the beginning of the table to the header,
+// remove the same element as value, the number is the absolute value of count.
+//
+// count = 0: Remove all values in the table that are equal to value.
+func (r *RedisConn) LRem(key string, args ...interface{}) (interface{}, error) {
+	args = *(go_helper.Prepend(&args, key))
+	return r.conn.Do("LREM", args...)
+}
 
+// LSET
+// LSet(key, index, value)
+// Set the value of element by index.
+func (r *RedisConn) LSet(key string, args ...interface{}) (interface{}, error) {
+	args = *(go_helper.Prepend(&args, key))
+	return r.conn.Do("LSET", args...)
+}
+
+// RPop
+// Remove the element which in the end of the list.
+// Return the value of element which is removed.
+// If the index is not exists, return nil.
+func (r *RedisConn) RPop(key string) (interface{}, error) {
+	return r.conn.Do("RPOP", key)
+}
+
+// RPush
+// RPush(key, "foo")
+// Insert one or more values into the end of the list(far right).
+func (r *RedisConn) RPush(key string, args ...interface{}) (interface{}, error) {
+	args = *(go_helper.Prepend(&args, key))
+	return r.conn.Do("RPUSH", args...)
+}
+
+// RPushx
+// RPushx(key, "foo")
+// Insert one value into the end of the list(far right).
+func (r *RedisConn) RPushx(key string, args ...interface{}) (interface{}, error) {
+	args = *(go_helper.Prepend(&args, key))
+	return r.conn.Do("RPUSHX", args...)
+}
 
 // convert interface to string.
 func (r *RedisConn) String(value interface{}) string {
