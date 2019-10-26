@@ -127,7 +127,7 @@ func (r *RedisConn) LPUSHX(key string, args ...interface{}) (interface{}, error)
 // LRANGE
 //
 // LRange(key, start, end)
-// Start or end is beginning with 0.
+// Start or end is beginning with 0, and -1 is meaning that the end of the list.
 //
 // Get the elements in the specified range of the list.
 func (r *RedisConn) LRange(key string, args ...interface{}) (interface{}, error) {
