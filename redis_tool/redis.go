@@ -69,8 +69,8 @@ func (r *RedisConn) Connection() {
 // return an interface and an error
 // Origin command: GET KEY_NAME
 func (r *RedisConn) Set(key string, args ...interface{}) (interface{}, error) {
-	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("SET", args...)
+	argsP := go_helper.Prepend(&args, key)
+	return r.conn.Do("SET", *(argsP)...)
 }
 
 // Get a value by a given key
@@ -95,8 +95,8 @@ func (r *RedisConn) Del(key string) (interface{}, error) {
 // Only set a value for the given key when the key is not exists
 // Origin command: SETNX KEY_NAME VALUE
 func (r *RedisConn) SetNX(key string, args ...interface{}) (interface{}, error) {
-	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("SETNX", args...)
+	argsP := go_helper.Prepend(&args, key)
+	return r.conn.Do("SETNX", *(argsP)...)
 }
 
 // Close connection
@@ -113,15 +113,15 @@ func (r *RedisConn) Expire(key string, timeout int) (interface{}, error) {
 // LPUSH
 // Insert one or more values into the list header
 func (r *RedisConn) LPush(key string, args ...interface{}) (interface{}, error) {
-	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("LPUSH", args...)
+	argsP := go_helper.Prepend(&args, key)
+	return r.conn.Do("LPUSH", *(argsP)...)
 }
 
 // LPUSHX
 // Insert one value into the the list header
 func (r *RedisConn) LPUSHX(key string, args ...interface{}) (interface{}, error) {
-	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("LPUSHX", args...)
+	argsP := go_helper.Prepend(&args, key)
+	return r.conn.Do("LPUSHX", *(argsP)...)
 }
 
 // LRANGE
@@ -131,8 +131,8 @@ func (r *RedisConn) LPUSHX(key string, args ...interface{}) (interface{}, error)
 //
 // Get the elements in the specified range of the list.
 func (r *RedisConn) LRange(key string, args ...interface{}) (interface{}, error) {
-	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("LRANGE", args...)
+	argsP := go_helper.Prepend(&args, key)
+	return r.conn.Do("LRANGE", *(argsP)...)
 }
 
 // LPOP
@@ -164,16 +164,16 @@ func (r *RedisConn) LIndex(key string) (interface{}, error) {
 //
 // count = 0: Remove all values in the table that are equal to value.
 func (r *RedisConn) LRem(key string, args ...interface{}) (interface{}, error) {
-	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("LREM", args...)
+	argsP := go_helper.Prepend(&args, key)
+	return r.conn.Do("LREM", *(argsP)...)
 }
 
 // LSET
 // LSet(key, index, value)
 // Set the value of element by index.
 func (r *RedisConn) LSet(key string, args ...interface{}) (interface{}, error) {
-	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("LSET", args...)
+	argsP := go_helper.Prepend(&args, key)
+	return r.conn.Do("LSET", *(argsP)...)
 }
 
 // RPop
@@ -188,24 +188,24 @@ func (r *RedisConn) RPop(key string) (interface{}, error) {
 // RPush(key, "foo")
 // Insert one or more values into the end of the list(far right).
 func (r *RedisConn) RPush(key string, args ...interface{}) (interface{}, error) {
-	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("RPUSH", args...)
+	argsP := go_helper.Prepend(&args, key)
+	return r.conn.Do("RPUSH", *(argsP)...)
 }
 
 // RPushx
 // RPushx(key, "foo")
 // Insert one value into the end of the list(far right).
 func (r *RedisConn) RPushx(key string, args ...interface{}) (interface{}, error) {
-	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("RPUSHX", args...)
+	argsP := go_helper.Prepend(&args, key)
+	return r.conn.Do("RPUSHX", *(argsP)...)
 }
 
 // LINSERT
 // LInsert(key, "BEFORE", element, value)
 // Insert value into before the element of the list.
 func (r *RedisConn) LInsert(key string, args ...interface{}) (interface{}, error) {
-	args = *(go_helper.Prepend(&args, key))
-	return r.conn.Do("LINSERT", args...)
+	argsP := go_helper.Prepend(&args, key)
+	return r.conn.Do("LINSERT", *(argsP)...)
 }
 
 // convert interface to string.
