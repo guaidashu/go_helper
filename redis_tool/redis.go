@@ -5,6 +5,7 @@
 package redis_tool
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"github.com/guaidashu/go_helper"
@@ -24,7 +25,7 @@ type RedisConn struct {
 }
 
 // init
-func (r *RedisConn) Init(config *RedisConfig) {
+func (r *RedisConn) Init(config *RedisConfig) error {
 	if config == nil {
 		r.Config = &RedisConfig{
 			Host:     "127.0.0.1",
@@ -47,22 +48,23 @@ func (r *RedisConn) Init(config *RedisConfig) {
 		}
 		r.Config = config
 	}
-	r.Connection()
+	return r.Connection()
 }
 
 // connect redis
-func (r *RedisConn) Connection() {
+func (r *RedisConn) Connection() error {
 	conn, err := redis.Dial(r.Config.NetWork, r.Config.Address)
 	if err != nil {
-		panic(fmt.Sprintf("redis connect error, %v", err))
+		return errors.New(fmt.Sprintf("redis connect error, %v", err))
 	}
 	if r.Config.Password != "" {
 		_, err := conn.Do("auth", r.Config.Password)
 		if err != nil {
-			panic(fmt.Sprintf("auth is failed, check your config or judge your password whether correct! error: %v", err))
+			return errors.New(fmt.Sprintf("auth is failed, check your config or judge your password whether correct! error: %v", err))
 		}
 	}
 	r.conn = conn
+	return nil
 }
 
 // Set a value for a customize key
