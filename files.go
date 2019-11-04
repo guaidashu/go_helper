@@ -23,7 +23,7 @@ import (
 // If you want to create a directory
 // Please given the third param,
 // example:
-// CreateMsPath("test.txt", true, true)
+// CreateMsPath("test", true, true)
 func CreateMsPath(args ...interface{}) error {
 	var err error
 	path := args[0].(string)
