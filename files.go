@@ -6,8 +6,8 @@ package go_helper
 
 import (
 	"bufio"
-	"fmt"
 	"io"
+	"log"
 	"os"
 	"regexp"
 	"strings"
@@ -79,14 +79,20 @@ func getPath(path string, item string) string {
 	return path + "/" + item
 }
 
-func createMsPath(path string) error {
+func createMsPath(path string) (err error) {
 	file, err := os.Create(path)
 	if err != nil {
-		fmt.Println("err = ", err)
-		return err
+		log.Println("err: ", err)
+		return
 	}
-	defer file.Close()
-	return nil
+	defer func() {
+		if err == nil {
+			err = file.Close()
+		} else {
+			_ = file.Close()
+		}
+	}()
+	return
 }
 
 func createMsDir(path string) error {
@@ -177,9 +183,15 @@ func ReadFileToByte(params ...interface{}) []byte {
 	return s
 }
 
-//过滤给定字符串(这个函数的目的开始是为了过滤我的json配置文件里的自定义注释)里的 注释，根据输入的 注释开头 和 结尾进行过滤
+// 写内容到文件
+// Write content to a file.
+// If there is not exists, the method will auto create it.
+func WriteStringToFile(path string, params ...interface{}) {
+}
+
+// 过滤给定字符串(这个函数的目的开始是为了过滤我的json配置文件里的自定义注释)里的 注释，根据输入的 注释开头 和 结尾进行过滤
 // 过滤的 开头和结尾需要转移特殊字符， 具体方式看例子
-//example:
+// example:
 //	FilterComment(data, "/\\*", "\\*/")
 func FilterComment(originStr, startStr, endStr string) string {
 	// 利用正则匹配替换
