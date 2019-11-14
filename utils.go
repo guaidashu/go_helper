@@ -102,9 +102,9 @@ so that we can find bug quickly.
 根据你的全局变量进行修改，以达到可以关闭的效果，否则是默认都会报告的
 */
 func NewReportError(err error) error {
-	//if !config.Config.App.DEBUG {
+	// if !config.Config.App.DEBUG {
 	//	return err
-	//}
+	// }
 	_, fileName, line, _ := runtime.Caller(1)
 	data := fmt.Sprintf("%v, report in: %v: in line %v", err, fileName, line)
 	return errors.New(data)
