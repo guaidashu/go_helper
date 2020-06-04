@@ -133,7 +133,7 @@ func shouldEscape(c byte, mode encoding) bool {
 	return true
 }
 
-func EscapeQueryParam(s string, mode encoding) string {
+func escape(s string, mode encoding) string {
 	spaceCount, hexCount := 0, 0
 	for i := 0; i < len(s); i++ {
 		c := s[i]
@@ -187,4 +187,8 @@ func EscapeQueryParam(s string, mode encoding) string {
 		}
 	}
 	return string(t)
+}
+
+func EscapeQueryParam(query string) string {
+	return escape(query, encodeQueryComponent)
 }

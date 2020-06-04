@@ -6,6 +6,8 @@ package go_helper
 
 import (
 	"bufio"
+	"errors"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -108,6 +110,11 @@ func PathExists(path string) (bool, error) {
 	if err == nil {
 		return true, nil
 	}
+
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+
 	return false, err
 }
 
@@ -184,9 +191,54 @@ func ReadFileToByte(params ...interface{}) []byte {
 }
 
 // 写内容到文件
+// params: you can give any type unlimit number data
 // Write content to a file.
 // If there is not exists, the method will auto create it.
-func WriteStringToFile(path string, params ...interface{}) {
+func WriteDataToFile(path string, params ...interface{}) (err error) {
+	var (
+		ok          bool
+		file        *os.File
+		content     string
+		contentByte []byte
+	)
+
+	if file, err = os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	defer func() {
+		// close file stream
+		if err = file.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	if len(params) < 1 {
+		fmt.Println(errors.New("null data"))
+		return
+	}
+
+	// 转化 要写入的内容
+	for _, data := range params {
+		if content, ok = data.(string); !ok {
+			if contentByte, ok = data.([]byte); !ok {
+				fmt.Println(errors.New("interface convert to string error"))
+				return
+			} else {
+				_, err = file.Write(contentByte)
+			}
+		} else {
+			_, err = file.Write([]byte(content))
+		}
+
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
+	return
 }
 
 // 过滤给定字符串(这个函数的目的开始是为了过滤我的json配置文件里的自定义注释)里的 注释，根据输入的 注释开头 和 结尾进行过滤
