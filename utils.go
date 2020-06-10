@@ -5,6 +5,8 @@
 package go_helper
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"runtime"
@@ -30,4 +32,33 @@ func NewReportError(err error) error {
 	_, fileName, line, _ := runtime.Caller(1)
 	data := fmt.Sprintf("%v, report in: %v: in line %v", err, fileName, line)
 	return errors.New(data)
+}
+
+/**
+用来打印json字符串，方便进行观察
+由于只是工具函数，调试开发用，所以不需要考虑资源消耗问题，直接上interface
+*/
+func PrintJsonIndent(data interface{}) {
+	var (
+		ok        bool
+		value     string
+		str       bytes.Buffer
+		jsonValue []byte
+		err       error
+	)
+
+	if value, ok = data.(string); ok {
+		jsonValue = []byte(value)
+	} else if jsonValue, ok = data.([]byte); !ok {
+		fmt.Println("error data")
+		return
+	}
+
+	if err = json.Indent(&str, jsonValue, "", "    "); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(str.String())
+
 }
