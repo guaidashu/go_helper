@@ -203,19 +203,22 @@ func WriteDataToFile(path string, params ...interface{}) (err error) {
 	)
 
 	if file, err = os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644); err != nil {
-		fmt.Println(err)
+		if strings.Contains(fmt.Sprintf("%v", err), "no such file or directory") {
+			if err = CreateMsPath(path, true, false); err != nil {
+				return
+			}
+			return WriteDataToFile(path, params...)
+		}
 		return
 	}
 
 	defer func() {
 		// close file stream
-		if err = file.Close(); err != nil {
-			fmt.Println(err)
-		}
+		err = file.Close()
 	}()
 
 	if len(params) < 1 {
-		fmt.Println(errors.New("null data"))
+		err = errors.New("null data")
 		return
 	}
 
@@ -223,7 +226,7 @@ func WriteDataToFile(path string, params ...interface{}) (err error) {
 	for _, data := range params {
 		if content, ok = data.(string); !ok {
 			if contentByte, ok = data.([]byte); !ok {
-				fmt.Println(errors.New("interface convert to string error"))
+				err = errors.New("interface convert to string error")
 				return
 			} else {
 				_, err = file.Write(contentByte)
@@ -233,7 +236,6 @@ func WriteDataToFile(path string, params ...interface{}) (err error) {
 		}
 
 		if err != nil {
-			fmt.Println(err)
 			return
 		}
 	}
@@ -242,7 +244,7 @@ func WriteDataToFile(path string, params ...interface{}) (err error) {
 }
 
 // 过滤给定字符串(这个函数的目的开始是为了过滤我的json配置文件里的自定义注释)里的 注释，根据输入的 注释开头 和 结尾进行过滤
-// 过滤的 开头和结尾需要转移特殊字符， 具体方式看例子
+// 过滤的 开头和结尾需要转义特殊字符， 具体方式看例子
 // example:
 //	FilterComment(data, "/\\*", "\\*/")
 func FilterComment(originStr, startStr, endStr string) string {
